@@ -1,0 +1,20 @@
+{% extends 'base2.html'%}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+{% block body %}
+<div class="container-fluid d-flex justify-content-center mt-4 mb-4">
+    <span style="color: white;font-size: large;">Choose the Team:</span><br>
+    <form action="{{url_for('stats')}}" method="POST" id="league_selector">
+    <select id="leagues" name="seasons">
+        {% for y in teams %}
+        <option  value="{{y}}">{{y}}</option>
+        {% endfor %}
+     </select>
+     <button type="submit" value="submit">Submit</button>
+    </form>
+</div>
+
+  </div>
+{% endblock %}
