@@ -53,9 +53,7 @@ def stats():
     data = {}
     i = 1
     
-    # Loop through each table and collect data
-    for table in tables:
-        # Build the query based on the year condition
+    
         if str_year != '23':
             table_name = f"{table}{str_year}"
         else:
@@ -71,7 +69,7 @@ def stats():
         if stat:
             data[i] = stat
         else:
-            data[i] = None  # You can adjust this based on how you want to handle empty results
+            data[i] = None  # 
         
         i += 1
     path=get_image(idz)
