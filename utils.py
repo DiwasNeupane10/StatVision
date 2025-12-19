@@ -26,11 +26,19 @@ model_obj={
 }
 '''
 @st.cache_data
-def instantiate_outfield_objects():
-    model_object=joblib.load('D:/StatVision/objects/outfield_nn_model.pkl')
-    X_pca=joblib.load('D:/StatVision/objects/outfield_pca.pkl')['outfield_pca']
-    knn=model_object['knn']
-    return knn,X_pca
+def instantiate_objects(type):
+    match type:
+        case 'outfield':
+            model_object=joblib.load('D:/StatVision/objects/outfield_nn_model.pkl')
+            X_pca=joblib.load('D:/StatVision/objects/outfield_pca.pkl')['outfield_pca']
+            knn=model_object['knn']
+            return knn,X_pca
+        case 'goalkeeper':
+            model_object=joblib.load('D:/StatVision/objects/goalkeeper_nn_model.pkl')
+            X_pca=joblib.load('D:/StatVision/objects/goalkeeper_pca.pkl')['goalkeeper_pca']
+            knn=model_object['knn']
+            return knn,X_pca
+
 
 def filter_position(position,df):
     position_map={

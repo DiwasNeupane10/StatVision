@@ -6,7 +6,7 @@ from utils import load_data,get_goalkeeper
 
 
     
-st.set_page_config(page_title="Compare Goalkeepers", page_icon="D:/StatVision/icons/football-shoes.png")
+st.set_page_config(page_title="Compare Goalkeepers", page_icon="D:/StatVision/icons/goalkeeper-glove.png")
 
 st.markdown("# Compare two Goalkeepers")
 
