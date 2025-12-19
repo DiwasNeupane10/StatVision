@@ -2,32 +2,42 @@ import plotly.graph_objects as go
 import streamlit as st
 import time
 import numpy as np
-from utils import get_goalkeeper,get_outfield,load_data
+from utils import load_data,filter_position,get_goalkeeper
 
-st.set_page_config(page_title="Compare Goalkeepers", page_icon="🥅")
 
-st.markdown("# Compare two goalkeepers")
-st.sidebar.header("Goal Keeper Comparison")
+    
+st.set_page_config(page_title="Compare Goalkeepers", page_icon="D:/StatVision/icons/football-shoes.png")
+
+st.markdown("# Compare two Goalkeepers")
+
+st.sidebar.header("Goalkeeper Comparision")
+
+_,df=load_data()
+
 st.write(
     """
-    Compare two goalkeepers on their individual statistics .
+    Compare two outfield players on their individual statistics .
 """
 )
+player1=st.selectbox("Select First Outfield Player",get_goalkeeper())
+player2=st.selectbox("Select Second Outfield Player",get_goalkeeper())
+comparision_cols=df.columns.tolist()
+comparision_cols=[cc for cc in comparision_cols if cc not in ['Player','Nation','Pos','Squad','Comp','Age']]
+select_comparision_cols=st.multiselect("Select Comparision Metrics",options=comparision_cols,max_selections=5)
 
-goalie1=st.sidebar.selectbox("Select First GoalKeeper",get_goalkeeper())
-goalie2=st.sidebar.selectbox("Select Second GoalKeeper",get_goalkeeper())
-
+compare_flag=st.button("Compare Players")
+print(type(select_comparision_cols))
 #radar chart code
-
-def radar(player1, player2):
+# compare_flag=st.checkbox("Compare Goalkeepers")
+def radar(player1, player2,df,categories):
     progress_bar = st.sidebar.progress(0)
     status_text = st.sidebar.empty()
     i=0
     status_text.text("%i%% Complete" % i)
     progress_bar.progress(i)
     time.sleep(0.05)
-    df,_=load_data()
-    categories = ['Gls','Ast','xG','xAG','Sh/90']
+    
+    # categories = ['Gls','Ast','xG','xAG','Sh/90']
     i+=25
     status_text.text("%i%% Complete" % i)
     progress_bar.progress(i)
@@ -51,14 +61,16 @@ def radar(player1, player2):
         r=player1_stats,
         theta=categories,
         fill='toself',
-        name=player1
+        name=player1,
+        line=dict(color='#ff7f0e')
     ))
 
     fig.add_trace(go.Scatterpolar(
         r=player2_stats,
         theta=categories,
         fill='toself',
-        name=player2
+        name=player2,
+         line=dict(color='#1f77b4')
     ))
     i+=25
     status_text.text("%i%% Complete" % i)
@@ -75,11 +87,22 @@ def radar(player1, player2):
         showlegend=True
     )
 
-    st.plotly_chart(fig, use_container_width=True)
-
+    st.plotly_chart(fig,width='stretch')
+    i+=25
+    status_text.text("%i%% Complete" % i)
+    progress_bar.progress(i)
+    time.sleep(0.05)
     progress_bar.empty()
 
+
+
+
+
 # Call the radar function
-radar(goalie1, goalie2)
+if compare_flag: 
+    if len(select_comparision_cols) < 4:
+        st.warning("Select at least 4 metrics for comparision")
+    else:
+        radar(player1, player2,df,select_comparision_cols)
 
 st.button("Re-run")
