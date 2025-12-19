@@ -27,10 +27,16 @@ comparision_cols=df.columns.tolist()
 comparision_cols=[cc for cc in comparision_cols if cc not in ['Player','Nation','Pos','Squad','Comp','Age']]
 select_comparision_cols=st.multiselect("Select Comparision Metrics",options=comparision_cols,max_selections=5)
 
+display=st.checkbox("Display individual stats")
 compare_flag=st.button("Compare Players")
 print(type(select_comparision_cols))
 #radar chart code
-# compare_flag=st.checkbox("Compare Goalkeepers")
+
+
+def get_idx(name):
+    idx=df.index.get_loc(df[df['Player'] == name].index[0])
+    return idx
+
 def radar(player1, player2,df,categories):
     progress_bar = st.sidebar.progress(0)
     status_text = st.sidebar.empty()
@@ -45,8 +51,8 @@ def radar(player1, player2,df,categories):
     progress_bar.progress(i)
     time.sleep(0.05)
     # Get integer positions
-    p1_idx = df.index.get_loc(df[df['Player'] == player1].index[0])
-    p2_idx = df.index.get_loc(df[df['Player'] == player2].index[0])
+    p1_idx = get_idx(player1)
+    p2_idx =get_idx(player2)
 
     # Extract stats
     player1_stats = df.iloc[p1_idx][categories].tolist()
@@ -95,6 +101,7 @@ def radar(player1, player2,df,categories):
     progress_bar.progress(i)
     time.sleep(0.05)
     progress_bar.empty()
+    return p1_idx,p2_idx
 
 
 
@@ -105,6 +112,12 @@ if compare_flag:
     if len(select_comparision_cols) < 4:
         st.warning("Select at least 4 metrics for comparision")
     else:
+        
+        if display:
+            st.dataframe(df.iloc[[get_idx(player1),get_idx(player2)]])
+            
         radar(player1, player2,df,select_comparision_cols)
 
 st.button("Re-run")
+
+
