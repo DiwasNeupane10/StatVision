@@ -46,7 +46,7 @@ st.set_page_config(page_title="Plotting Demo2", page_icon="")
 st.markdown("# Similarity Search")
 st.sidebar.header("Similarity Search")
 player=st.sidebar.selectbox("Select Player to search",g_df['Player'].to_list()+o_df['Player'].to_list())
-similar_flag=st.sidebar.button("Generate Top 5 Similar Players")
+similar_flag=st.sidebar.button("Generate Top 3 Similar Players")
 st.markdown("""
 ### Discover Similar Players Using Machine Learning
 

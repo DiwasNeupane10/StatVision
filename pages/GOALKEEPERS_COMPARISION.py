@@ -117,7 +117,9 @@ if compare_flag:
             for key,value in stats_dict.items():
                 key=key.replace('_',' ')
                 st.subheader(key)
-                st.dataframe(df.iloc[[player1_idx,player2_idx]][value])
+                value.insert(0,'Player')
+                value_numcols=df[value].select_dtypes(include=np.number).columns
+                st.dataframe(df.iloc[[player1_idx,player2_idx]][value].style.highlight_max(subset=value_numcols,axis=0))
             
 
 st.button("Re-run")

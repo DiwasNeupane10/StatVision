@@ -14,6 +14,7 @@ st.sidebar.header("Outfield Players Comparison")
 
 position=st.sidebar.selectbox("Select a Position ",['Midfield','Defense','Forward'])
 _,df=load_data()
+print(df.columns)
 filtered_df,filtered_names=filter_position(position,df)
 
 st.markdown(
@@ -118,12 +119,15 @@ if compare_flag:
             radar(player1, player2,df,select_comparision_cols)
             st.subheader("STANDARD STATS")
             player1_idx,player2_idx=get_idx(player1),get_idx(player2)
-            st.dataframe(df.iloc[[player1_idx,player2_idx]])
+            num_cols=df.select_dtypes(include=np.number).columns
+            st.dataframe(df.iloc[[player1_idx,player2_idx]].style.highlight_max(axis=0,subset=num_cols))
             stats_dict=detailed_stats('outfield')
             for key,value in stats_dict.items():
                 key=key.replace('_',' ')
                 st.subheader(key)
-                st.dataframe(df.iloc[[player1_idx,player2_idx]][value])
+                value.insert(0,'Player')
+                value_numcols=df[value].select_dtypes(include=np.number).columns
+                st.dataframe(df.iloc[[player1_idx,player2_idx]][value].style.highlight_max(subset=value_numcols,axis=0))
             
 
 st.button("Re-run")
