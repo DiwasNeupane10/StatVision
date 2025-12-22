@@ -50,4 +50,4 @@ The project enables:
 
 ---
 
-[1]: https://wwww.github.com/DiwasNeupane10/Learning-ML/blob/main/knn%20and%20clustering/FootballPlayer.ipynb****
+[1]: https://www.github.com/DiwasNeupane10/Learning-ML/blob/main/knn%20and%20clustering/FootballPlayer.ipynb****
