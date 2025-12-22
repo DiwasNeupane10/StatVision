@@ -2,13 +2,13 @@ import plotly.graph_objects as go
 import streamlit as st
 import time
 import numpy as np
-from utils import load_data,filter_position
+from utils import load_data,filter_position,detailed_stats
 
 
     
 st.set_page_config(page_title="Compare Outfield Players", page_icon="D:/StatVision/icons/football-shoes.png")
 
-st.markdown("# Compare two Outfield PLayers")
+st.header("Compare Outfield Players")
 
 st.sidebar.header("Outfield Players Comparison")
 
@@ -16,9 +16,9 @@ position=st.sidebar.selectbox("Select a Position ",['Midfield','Defense','Forwar
 _,df=load_data()
 filtered_df,filtered_names=filter_position(position,df)
 
-st.write(
+st.markdown(
     """
-    Compare two outfield players on their individual statistics .
+    ##### Compare two outfield players on their individual statistics .
 """
 )
 player1=st.selectbox("Select First Outfield Player",filtered_names)
@@ -114,9 +114,17 @@ if compare_flag:
     else:
         
         if display:
-            st.dataframe(df.iloc[[get_idx(player1),get_idx(player2)]])
+            st.subheader("RADAR CHART")
+            radar(player1, player2,df,select_comparision_cols)
+            st.subheader("STANDARD STATS")
+            player1_idx,player2_idx=get_idx(player1),get_idx(player2)
+            st.dataframe(df.iloc[[player1_idx,player2_idx]])
+            stats_dict=detailed_stats('outfield')
+            for key,value in stats_dict.items():
+                key=key.replace('_',' ')
+                st.subheader(key)
+                st.dataframe(df.iloc[[player1_idx,player2_idx]][value])
             
-        radar(player1, player2,df,select_comparision_cols)
 
 st.button("Re-run")
 

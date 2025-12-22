@@ -7,26 +7,37 @@ st.set_page_config(page_title="StatsVision", layout="wide", page_icon="")
 st.title("StatsVision")
 st.markdown("Where passion meets precision, football analytics reimagined")
 
-# Sidebar for chart selection and options
 
+st.info("👉 Select a page from the sidebar to begin exploring the data.")
 
+st.markdown("""
+### 📌 About the Project
 
-# Chart type selection
-# chart_type = st.sidebar.selectbox(
-#     "Select Chart Type",
-#     ["Line Chart", "Bar Chart", "Scatter Plot", "Pie Chart", "Area Chart", 
-#      "Histogram", "Box Plot", "Heatmap", "3D Scatter"]
-# )
-# goalkeeper_names=joblib.load('objects/goalkeepers.pkl')['goalkeepers']
-# outfield_names=joblib.load('objects/outfield.pkl')['outfield']
-# st.sidebar.selectbox('Goalkeepers',goalkeeper_names)
-# st.sidebar.selectbox('Outfield Players',outfield_names)
+**StatsVision** is a football analytics platform focused on **player performance analysis**  
+using **data-driven and machine learning techniques**.
 
-# Generate sample data
-# @st.cache_data
-# def load_data():
-#     goalkeeper_df=pd.read_csv('D:/StatVision/data/goalkeepers.csv')
-#     outfield_df=pd.read_csv('D:/StatVision/data/outfield.csv')
-#     return goalkeeper_df,outfield_df
+This project aims to:
+- Analyze player statistics across multiple dimensions
+- Reduce high-dimensional football data using **PCA**
+- Identify **similar players** using clustering & distance-based models
+- Provide **interactive visualizations** for analysts and fans
+
+---
+
+### 🧠 Key Techniques Used
+- **Feature Scaling & PCA** for dimensionality reduction  
+- **Clustering / Similarity Models** (KNN, cosine distance, etc.)
+- **Interactive Visualizations** using Plotly & Streamlit
+- Position-specific analysis (e.g., **Goalkeepers vs Outfield players**)
+
+---
+
+### 📊 What You Can Explore
+Use the sidebar to navigate through:
+- 🔍 **Player Analysis** – compare and visualize players
+- 🧤 **Goalkeeper Analysis** – GK-specific metrics & similarity
+---
+""")
+
 
 

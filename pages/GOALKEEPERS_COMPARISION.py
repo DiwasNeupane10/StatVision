@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 import streamlit as st
 import time
 import numpy as np
-from utils import load_data,get_goalkeeper
+from utils import load_data,get_goalkeeper,detailed_stats
 
 
     
@@ -108,8 +108,16 @@ if compare_flag:
         st.warning("Select at least 4 metrics for comparision")
     else:
         if display:
-            st.dataframe(df.iloc[[get_idx(player1),get_idx(player2)]])
+            st.subheader("RADAR CHART")
+            radar(player1, player2,df,select_comparision_cols)
+            st.subheader("STANDARD STATS")
+            player1_idx,player2_idx=get_idx(player1),get_idx(player2)
+            st.dataframe(df.iloc[[player1_idx,player2_idx]])
+            stats_dict=detailed_stats('goalkeeper')
+            for key,value in stats_dict.items():
+                key=key.replace('_',' ')
+                st.subheader(key)
+                st.dataframe(df.iloc[[player1_idx,player2_idx]][value])
             
-        radar(player1, player2,df,select_comparision_cols)
 
 st.button("Re-run")
