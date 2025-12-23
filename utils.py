@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import time
+import plotly.graph_objects as go
 @st.cache_data
 def load_data():
     goalkeeper_df=pd.read_csv('D:/StatVision/data/goalkeepers.csv')
@@ -83,3 +85,74 @@ def detailed_stats(case):
 
         }
         return goalkeeper_stats
+    
+
+def radar(player1, player2,df,categories):
+    progress_bar = st.sidebar.progress(0)
+    status_text = st.sidebar.empty()
+    i=0
+    status_text.text("%i%% Complete" % i)
+    progress_bar.progress(i)
+    time.sleep(0.05)
+    
+    # categories = ['Gls','Ast','xG','xAG','Sh/90']
+    i+=25
+    status_text.text("%i%% Complete" % i)
+    progress_bar.progress(i)
+    time.sleep(0.05)
+    # Get integer positions
+    p1_idx = get_idx(player1,df)
+    p2_idx =get_idx(player2,df)
+
+    # Extract stats
+    player1_stats = df.iloc[p1_idx][categories].tolist()
+    player2_stats = df.iloc[p2_idx][categories].tolist()
+
+    # Create radar chart
+    fig = go.Figure()
+    i+=25
+    status_text.text("%i%% Complete" % i)
+    progress_bar.progress(i)
+    time.sleep(0.05)
+
+    fig.add_trace(go.Scatterpolar(
+        r=player1_stats,
+        theta=categories,
+        fill='toself',
+        name=player1,
+        line=dict(color='#ff7f0e')
+    ))
+
+    fig.add_trace(go.Scatterpolar(
+        r=player2_stats,
+        theta=categories,
+        fill='toself',
+        name=player2,
+         line=dict(color='#1f77b4')
+    ))
+    i+=25
+    status_text.text("%i%% Complete" % i)
+    progress_bar.progress(i)
+    time.sleep(0.05)
+    
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[0, max(max(player1_stats), max(player2_stats)) * 1.1]  # automatic range
+            )
+        ),
+        showlegend=True
+    )
+
+    st.plotly_chart(fig,width='stretch')
+    i+=25
+    status_text.text("%i%% Complete" % i)
+    progress_bar.progress(i)
+    time.sleep(0.05)
+    progress_bar.empty()
+
+
+def get_idx(name,df):
+    idx=df.index.get_loc(df[df['Player'] == name].index[0])
+    return idx

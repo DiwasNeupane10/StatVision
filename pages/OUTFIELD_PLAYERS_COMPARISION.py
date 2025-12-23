@@ -1,8 +1,8 @@
-import plotly.graph_objects as go
+
 import streamlit as st
-import time
+
 import numpy as np
-from utils import load_data,filter_position,detailed_stats
+from utils import load_data,filter_position,detailed_stats,radar,get_idx
 
 
     
@@ -14,7 +14,7 @@ st.sidebar.header("Outfield Players Comparison")
 
 position=st.sidebar.selectbox("Select a Position ",['Midfield','Defense','Forward'])
 _,df=load_data()
-print(df.columns)
+
 filtered_df,filtered_names=filter_position(position,df)
 
 st.markdown(
@@ -30,79 +30,12 @@ select_comparision_cols=st.multiselect("Select Comparision Metrics",options=comp
 
 display=st.checkbox("Display individual stats")
 compare_flag=st.button("Compare Players")
-print(type(select_comparision_cols))
 #radar chart code
 
 
-def get_idx(name):
-    idx=df.index.get_loc(df[df['Player'] == name].index[0])
-    return idx
 
-def radar(player1, player2,df,categories):
-    progress_bar = st.sidebar.progress(0)
-    status_text = st.sidebar.empty()
-    i=0
-    status_text.text("%i%% Complete" % i)
-    progress_bar.progress(i)
-    time.sleep(0.05)
-    
-    # categories = ['Gls','Ast','xG','xAG','Sh/90']
-    i+=25
-    status_text.text("%i%% Complete" % i)
-    progress_bar.progress(i)
-    time.sleep(0.05)
-    # Get integer positions
-    p1_idx = get_idx(player1)
-    p2_idx =get_idx(player2)
 
-    # Extract stats
-    player1_stats = df.iloc[p1_idx][categories].tolist()
-    player2_stats = df.iloc[p2_idx][categories].tolist()
-
-    # Create radar chart
-    fig = go.Figure()
-    i+=25
-    status_text.text("%i%% Complete" % i)
-    progress_bar.progress(i)
-    time.sleep(0.05)
-
-    fig.add_trace(go.Scatterpolar(
-        r=player1_stats,
-        theta=categories,
-        fill='toself',
-        name=player1,
-        line=dict(color='#ff7f0e')
-    ))
-
-    fig.add_trace(go.Scatterpolar(
-        r=player2_stats,
-        theta=categories,
-        fill='toself',
-        name=player2,
-         line=dict(color='#1f77b4')
-    ))
-    i+=25
-    status_text.text("%i%% Complete" % i)
-    progress_bar.progress(i)
-    time.sleep(0.05)
-    
-    fig.update_layout(
-        polar=dict(
-            radialaxis=dict(
-                visible=True,
-                range=[0, max(max(player1_stats), max(player2_stats)) * 1.1]  # automatic range
-            )
-        ),
-        showlegend=True
-    )
-
-    st.plotly_chart(fig,width='stretch')
-    i+=25
-    status_text.text("%i%% Complete" % i)
-    progress_bar.progress(i)
-    time.sleep(0.05)
-    progress_bar.empty()
-    return p1_idx,p2_idx
+   
 
 
 
@@ -118,7 +51,7 @@ if compare_flag:
             st.subheader("RADAR CHART")
             radar(player1, player2,df,select_comparision_cols)
             st.subheader("STANDARD STATS")
-            player1_idx,player2_idx=get_idx(player1),get_idx(player2)
+            player1_idx,player2_idx=get_idx(player1,df),get_idx(player2,df)
             num_cols=df.select_dtypes(include=np.number).columns
             st.dataframe(df.iloc[[player1_idx,player2_idx]].style.highlight_max(axis=0,subset=num_cols))
             stats_dict=detailed_stats('outfield')
