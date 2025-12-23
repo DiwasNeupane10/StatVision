@@ -145,7 +145,7 @@ def radar(player1, player2,df,categories):
         showlegend=True
     )
 
-    st.plotly_chart(fig,width='stretch')
+    st.plotly_chart(fig,width='content')
     i+=25
     status_text.text("%i%% Complete" % i)
     progress_bar.progress(i)
@@ -156,3 +156,8 @@ def radar(player1, player2,df,categories):
 def get_idx(name,df):
     idx=df.index.get_loc(df[df['Player'] == name].index[0])
     return idx
+
+def barchart_data(name1,name2,df,columns):
+    data1=df.iloc[get_idx(name1,df)][columns].values
+    data2=df.iloc[get_idx(name2,df)][columns].values
+    return pd.DataFrame({name1:data1,name2:data2},index=columns)

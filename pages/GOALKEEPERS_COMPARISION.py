@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 import streamlit as st
 import time
 import numpy as np
-from utils import load_data,get_goalkeeper,detailed_stats,radar,get_idx
+from utils import load_data,get_goalkeeper,detailed_stats,radar,get_idx,barchart_data
 
 
     
@@ -19,8 +19,14 @@ st.write(
     Compare two outfield players on their individual statistics .
 """
 )
-player1=st.selectbox("Select First Outfield Player",get_goalkeeper())
-player2=st.selectbox("Select Second Outfield Player",get_goalkeeper())
+player1=st.selectbox("Select First Outfield Player",get_goalkeeper(),key='gplayer1')
+player2=st.selectbox("Select Second Outfield Player",get_goalkeeper(),key='gplayer2')
+same_gflag=True
+if player1==player2:
+    st.warning("Select different players")
+    st.stop()
+else:
+    same_gflag=False
 comparision_cols=df.columns.tolist()
 comparision_cols=[cc for cc in comparision_cols if cc not in ['Player','Nation','Pos','Squad','Comp','Age']]
 select_comparision_cols=st.multiselect("Select Comparision Metrics",options=comparision_cols,max_selections=5)
@@ -38,13 +44,20 @@ compare_flag=st.button("Compare Players")
 
 
 # Call the radar function
-if compare_flag: 
+if compare_flag and not(same_gflag): 
     if len(select_comparision_cols) < 4:
         st.warning("Select at least 4 metrics for comparision")
     else:
         if display:
-            st.subheader("RADAR CHART")
-            radar(player1, player2,df,select_comparision_cols)
+            col1,col2=st.columns(2)
+            with col1:
+
+                st.subheader("RADAR CHART")
+                radar(player1, player2,df,select_comparision_cols)
+            with col2:
+                st.subheader("BAR CHART")
+                data=barchart_data(player1,player2,df,select_comparision_cols)
+                st.bar_chart(data)
             st.subheader("STANDARD STATS")
             player1_idx,player2_idx=get_idx(player1,df),get_idx(player2,df)
             st.dataframe(df.iloc[[player1_idx,player2_idx]])

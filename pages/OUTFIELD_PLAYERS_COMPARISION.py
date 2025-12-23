@@ -2,7 +2,7 @@
 import streamlit as st
 
 import numpy as np
-from utils import load_data,filter_position,detailed_stats,radar,get_idx
+from utils import load_data,filter_position,detailed_stats,radar,get_idx,barchart_data
 
 
     
@@ -24,6 +24,12 @@ st.markdown(
 )
 player1=st.selectbox("Select First Outfield Player",filtered_names)
 player2=st.selectbox("Select Second Outfield Player",filtered_names)
+same_flag=True
+if player1==player2:
+    st.warning("Select different players")
+    st.stop()
+else:
+    same_flag=False
 comparision_cols=df.columns.tolist()
 comparision_cols=[cc for cc in comparision_cols if cc not in ['Player','Nation','Pos','Squad','Comp','Age']]
 select_comparision_cols=st.multiselect("Select Comparision Metrics",options=comparision_cols,max_selections=5)
@@ -42,14 +48,20 @@ compare_flag=st.button("Compare Players")
 
 
 # Call the radar function
-if compare_flag: 
+if compare_flag and  not(same_flag): 
     if len(select_comparision_cols) < 4:
         st.warning("Select at least 4 metrics for comparision")
     else:
         
         if display:
-            st.subheader("RADAR CHART")
-            radar(player1, player2,df,select_comparision_cols)
+            col1,col2=st.columns(2)
+            with col1:
+                st.subheader("RADAR CHART")
+                radar(player1, player2,df,select_comparision_cols)
+            with col2:
+                st.subheader("BAR CHART")
+                data=barchart_data(player1,player2,df,select_comparision_cols)
+                st.bar_chart(data)
             st.subheader("STANDARD STATS")
             player1_idx,player2_idx=get_idx(player1,df),get_idx(player2,df)
             num_cols=df.select_dtypes(include=np.number).columns
