@@ -45,7 +45,7 @@ def ret_similar_players(player_name,g_df,o_df):
         print(type(similar_players))
         return similar_players
 
-st.set_page_config(page_title="Plotting Demo2", page_icon="")
+
 
 st.markdown("# Similarity Search")
 st.sidebar.header("Similarity Search")
@@ -66,4 +66,5 @@ if similar_flag:
 # Streamlit widgets automatically run the script from top to bottom. Since
 # this button is not connected to any other logic, it just causes a plain
 # rerun.
+
 st.button("Re-run")
