@@ -6,7 +6,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent
 
-st.set_page_config(page_title="Compare Outfield Players", page_icon=f"{BASE_DIR}/icons/audio.png")
+st.set_page_config(page_title="Search Similar Players", page_icon=f"{BASE_DIR}/icons/audio.png")
 
 g_df,o_df=load_data()
 def ret_similar_players(player_name,g_df,o_df):
@@ -68,3 +68,4 @@ if similar_flag:
 # rerun.
 
 st.button("Re-run")
+
