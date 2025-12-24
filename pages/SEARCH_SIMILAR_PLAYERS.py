@@ -2,7 +2,11 @@ import streamlit as st
 import time
 import numpy as np
 from utils import instantiate_objects,load_data
-st.set_page_config(page_title="Compare Outfield Players", page_icon="D:/StatVision/icons/audio.png")
+from pathlib import Path
+
+BASE_DIR = Path(__file__).parent.parent
+
+st.set_page_config(page_title="Compare Outfield Players", page_icon=f"{BASE_DIR}/icons/audio.png")
 
 g_df,o_df=load_data()
 def ret_similar_players(player_name,g_df,o_df):

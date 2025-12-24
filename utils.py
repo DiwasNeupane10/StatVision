@@ -3,10 +3,13 @@ import pandas as pd
 import joblib
 import time
 import plotly.graph_objects as go
+from pathlib import Path
+BASE_DIR = Path(__file__).parent
+
 @st.cache_data
 def load_data():
-    goalkeeper_df=pd.read_csv('D:/StatVision/data/goalkeepers.csv')
-    outfield_df=pd.read_csv('D:/StatVision/data/outfield.csv')
+    goalkeeper_df=pd.read_csv(f'{BASE_DIR}/data/goalkeepers.csv')
+    outfield_df=pd.read_csv(f'{BASE_DIR}/data/outfield.csv')
     return goalkeeper_df,outfield_df
 
 @st.cache_data
@@ -31,13 +34,13 @@ model_obj={
 def instantiate_objects(type):
     match type:
         case 'outfield':
-            model_object=joblib.load('D:/StatVision/objects/outfield_nn_model.pkl')
-            X_pca=joblib.load('D:/StatVision/objects/outfield_pca.pkl')['outfield_pca']
+            model_object=joblib.load(f'{BASE_DIR}/objects/outfield_nn_model.pkl')
+            X_pca=joblib.load(f'{BASE_DIR}/objects/outfield_pca.pkl')['outfield_pca']
             knn=model_object['knn']
             return knn,X_pca
         case 'goalkeeper':
-            model_object=joblib.load('D:/StatVision/objects/goalkeeper_nn_model.pkl')
-            X_pca=joblib.load('D:/StatVision/objects/goalkeeper_pca.pkl')['goalkeeper_pca']
+            model_object=joblib.load(f'{BASE_DIR}/objects/goalkeeper_nn_model.pkl')
+            X_pca=joblib.load(f'{BASE_DIR}/objects/goalkeeper_pca.pkl')['goalkeeper_pca']
             knn=model_object['knn']
             return knn,X_pca
 
@@ -55,8 +58,8 @@ def filter_position(position,df):
 
 @st.cache_data
 def instantiate_clusters():
-    goalkeeper_cluster=joblib.load('D:/StatVision/objects/goalkeepercluster_obj.pkl')
-    outfield_cluster=joblib.load('D:/StatVision/objects/outfieldcluster_obj.pkl')
+    goalkeeper_cluster=joblib.load(f'{BASE_DIR}/objects/goalkeepercluster_obj.pkl')
+    outfield_cluster=joblib.load(f'{BASE_DIR}/objects/outfieldcluster_obj.pkl')
     return goalkeeper_cluster,outfield_cluster
 
 

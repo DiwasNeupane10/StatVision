@@ -3,10 +3,13 @@ import streamlit as st
 import time
 import numpy as np
 from utils import load_data,get_goalkeeper,detailed_stats,radar,get_idx,barchart_data
+from pathlib import Path
 
+BASE_DIR = Path(__file__).parent.parent
 
     
-st.set_page_config(page_title="Compare Goalkeepers", page_icon="D:/StatVision/icons/goalkeeper-glove.png")
+st.set_page_config(page_title="Compare Goalkeepers", page_icon=f"{BASE_DIR}/icons/goalkeeper-glove.png")
+
 
 st.markdown("# Compare two Goalkeepers")
 
@@ -33,7 +36,6 @@ select_comparision_cols=st.multiselect("Select Comparision Metrics",options=comp
 display=st.checkbox("Display individual stats")
 compare_flag=st.button("Compare Players")
 
-#radar chart code
 
 
 
@@ -57,7 +59,7 @@ if compare_flag and not(same_gflag):
             with col2:
                 st.subheader("BAR CHART")
                 data=barchart_data(player1,player2,df,select_comparision_cols)
-                st.bar_chart(data)
+                st.bar_chart(data,stack=True)
             st.subheader("STANDARD STATS")
             player1_idx,player2_idx=get_idx(player1,df),get_idx(player2,df)
             st.dataframe(df.iloc[[player1_idx,player2_idx]])

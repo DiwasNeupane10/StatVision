@@ -4,9 +4,11 @@ import streamlit as st
 import numpy as np
 from utils import load_data,filter_position,detailed_stats,radar,get_idx,barchart_data
 
+from pathlib import Path
 
+BASE_DIR = Path(__file__).parent.parent
     
-st.set_page_config(page_title="Compare Outfield Players", page_icon="D:/StatVision/icons/football-shoes.png")
+st.set_page_config(page_title="Compare Outfield Players", page_icon=f"{BASE_DIR}/icons/football-shoes.png")
 
 st.header("Compare Outfield Players")
 

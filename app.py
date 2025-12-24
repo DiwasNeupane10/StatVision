@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Page configuration
-st.set_page_config(page_title="StatsVision", layout="wide", page_icon="")
+st.set_page_config(page_title="StatsVision", layout="wide", page_icon="⚽")
 
 # Title and description
 st.title("StatsVision")
